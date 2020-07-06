@@ -282,6 +282,10 @@ handle_packet(#ping_ack_packet{ count = _Count }, state_connected, State) ->
   },
   set_state(NewSt, State);
 
+handle_packet(#data_udp_packet{ data = Binary }, state_connected, State) ->
+  send_owner({ rudp_received, do_get_socket(State), Binary }, State),
+  State;
+
 handle_packet(Packet, St, State) ->
   %% ?ERROR("Bad packet ~p for state ~p", [ Packet, St ]),
   State.
